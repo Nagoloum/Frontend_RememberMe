@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import { setAuthToken } from '../services/api';
 
 
 export default function AuthPage() {
@@ -37,6 +38,7 @@ export default function AuthPage() {
       if (res.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        setAuthToken(data.token);
         navigate('/home', { replace: true });
       } else {
         alert(data.message || 'Erreur d’authentification');

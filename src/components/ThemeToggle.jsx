@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ floating = true, variant = 'default', className = '' }) {
   const [isDark, setIsDark] = useState(false);
 
   // Au chargement : on vérifie le localStorage ou la préférence système
@@ -35,27 +35,33 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed bottom-8 right-8 z-50 p-4 bg-white dark:bg-gray-800 rounded-full hover:shadow-indigo-500/20 dark:hover:shadow-indigo-400/30 border border-gray-200 dark:border-gray-700 transition-all duration-500 group"
+      className={`${floating ? 'fixed bottom-8 right-8 z-50' : ''} ${
+        variant === 'sidebar'
+          ? 'p-2 bg-transparent dark:bg-transparent border-0 hover:shadow-none'
+          : 'p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-indigo-500/20 dark:hover:shadow-indigo-400/30'
+      } rounded-full transition-all duration-500 group ${className}`}
       aria-label="Toggle dark mode"
     >
-      <div className="relative w-8 h-8">
+      <div className={`relative ${variant === 'sidebar' ? 'w-6 h-6' : 'w-8 h-8'}`}>
         {/* Soleil (light mode) */}
         <Sun
-          className={`absolute inset-0 w-8 h-8 text-indigo-500 transition-all duration-700 ${
+          className={`absolute inset-0 ${variant === 'sidebar' ? 'w-6 h-6' : 'w-8 h-8'} text-indigo-500 transition-all duration-700 ${
             isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
           }`}
         />
 
         {/* Lune (dark mode) */}
         <Moon
-          className={`absolute inset-0 w-8 h-8 text-indigo-400 transition-all duration-700 ${
+          className={`absolute inset-0 ${variant === 'sidebar' ? 'w-6 h-6' : 'w-8 h-8'} text-indigo-400 transition-all duration-700 ${
             isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
           }`}
         />
       </div>
 
       {/* Effet de glow subtil */}
-      <div className="absolute inset-0 rounded-full bg-indigo-500/20 dark:bg-indigo-400/30 scale-0 group-hover:scale-105 transition-transform duration-300" />
+      {variant !== 'sidebar' && (
+        <div className="absolute inset-0 rounded-full bg-indigo-500/20 dark:bg-indigo-400/30 scale-0 group-hover:scale-105 transition-transform duration-300" />
+      )}
     </button>
   );
 }

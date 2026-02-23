@@ -25,6 +25,17 @@ if (storedToken) {
   setAuthToken(storedToken);
 }
 
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  } else if (config.headers) {
+    delete config.headers.Authorization;
+  }
+  return config;
+});
+
 // Intercepteur pour gérer les erreurs globalement
 api.interceptors.response.use(
   (response) => response,
@@ -32,7 +43,11 @@ api.interceptors.response.use(
     // Optionnel : gérer 401 (déconnexion)
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
       setAuthToken(null);
+      if (window.location.pathname !== '/auth') {
+        window.location.assign('/auth');
+      }
       // window.location.href = '/login'; // Décommente si tu as une page login
     }
     return Promise.reject(error);
@@ -43,8 +58,8 @@ api.interceptors.response.use(
 // Fonctions API
 // ========================
 
-export const getTodos = async () => {
-  const response = await api.get('/todos');
+export const getTodos = async (params) => {
+  const response = await api.get('/todos', params ? { params } : undefined);
   return response.data; // ← On retourne directement les données
 };
 
@@ -61,6 +76,16 @@ export const updateTodo = async (id, updates) => {
 export const deleteTodo = async (id) => {
   const response = await api.delete(`/todos/${id}`);
   return response.data; // ← { message, todos } d'après ton controller
+};
+
+export const getLists = async () => {
+  const response = await api.get('/lists');
+  return response.data;
+};
+
+export const createList = async (name) => {
+  const response = await api.post('/lists', { name });
+  return response.data;
 };
 
 // Bonus : fonction pour login (si tu en as besoin plus tard)

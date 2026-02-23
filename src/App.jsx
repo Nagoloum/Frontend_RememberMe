@@ -17,6 +17,7 @@ import TodayPage from './pages/Today';
 import CalendarPage from './pages/Calendar';
 import StickyWallPage from './pages/StickyWall';
 import HomePage from './pages/Home';
+import ListePage from './pages/Liste';
 
 // Layouts
 import RouteLayout from './layouts/RouteLayout';     // Gère loader + auth + transitions
@@ -95,12 +96,23 @@ function App() {
             }
           />
 
+          <Route
+            path="/lists/:name"
+            element={
+              <RouteLayout requireAuth={true}>
+                <Layout>
+                  <ListePage />
+                </Layout>
+              </RouteLayout>
+            }
+          />
+
           {/* 404 */}
           <Route path="*" element={<ErrorPage />} />
         </Routes>
 
         {/* Composants visibles sur toutes les pages */}
-        <ThemeToggle />
+        <ThemeToggle className="hidden md:block" />
         {/* Si tu veux d'autres composants globaux plus tard : */}
         {/* <BrowserTranslateToggle /> */}
         {/* <LanguageToggle /> */}

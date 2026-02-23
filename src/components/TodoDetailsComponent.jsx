@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Calendar, Flag, ListTodo, Edit2, Save, X } from 'lucide-react';
-import { updateTodo } from '../services/api';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Calendar, Clock, Flag, ListTodo, Edit2, Save, X } from 'lucide-react';
+import { getLists, updateTodo } from '../services/api';
 
 const PRIORITY_OPTIONS = [
   { value: 'low', label: 'Low', emoji: '🟢', color: 'text-green-600' },
@@ -8,12 +8,31 @@ const PRIORITY_OPTIONS = [
   { value: 'high', label: 'High', emoji: '🔴', color: 'text-red-600' },
 ];
 
-const LIST_OPTIONS = ['General', 'Home', 'School', 'Project', 'Health', 'Work', 'Personal'];
-
-export default function TodoDetailsComponent({ todo, onUpdate }) {
+export default function TodoDetailsComponent({ todo, onUpdate, onError }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTodo, setEditedTodo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [lists, setLists] = useState([]);
+  const minDate = new Date().toISOString().split('T')[0];
+
+  const listOptions = useMemo(() => {
+    return ['General', ...lists.map((l) => l.name)].filter((v, i, a) => a.indexOf(v) === i);
+  }, [lists]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await getLists();
+        setLists(Array.isArray(res) ? res : []);
+      } catch {
+        setLists([]);
+      }
+    };
+    load();
+    const onListsChanged = () => load();
+    window.addEventListener('lists:changed', onListsChanged);
+    return () => window.removeEventListener('lists:changed', onListsChanged);
+  }, []);
 
   const startEditing = () => {
     setEditedTodo({
@@ -21,6 +40,7 @@ export default function TodoDetailsComponent({ todo, onUpdate }) {
       description: todo.description || '',
       completed: todo.completed || false,
       dueDate: todo.dueDate ? new Date(todo.dueDate).toISOString().split('T')[0] : '',
+      dueTime: todo.dueTime || '',
       list: todo.list || 'General',
       priority: todo.priority || 'medium',
     });
@@ -42,6 +62,7 @@ export default function TodoDetailsComponent({ todo, onUpdate }) {
         description: editedTodo.description.trim() || null,
         completed: editedTodo.completed,
         dueDate: editedTodo.dueDate || null,
+        dueTime: editedTodo.dueTime || null,
         list: editedTodo.list,
         priority: editedTodo.priority,
       };
@@ -65,7 +86,7 @@ export default function TodoDetailsComponent({ todo, onUpdate }) {
     
     } catch (err) {
       console.error('Error updating task:', err);
-      // Tu peux ajouter un toast ici
+      if (onError) onError(err?.response?.data?.message || 'Erreur lors de la mise à jour de la tâche');
     } finally {
       setLoading(false);
     }
@@ -188,7 +209,7 @@ export default function TodoDetailsComponent({ todo, onUpdate }) {
                 onChange={(e) => setEditedTodo({ ...editedTodo, list: e.target.value })}
                 className="mt-1 px-3 py-2 rounded-lg border dark:text-white border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                {LIST_OPTIONS.map((opt) => (
+                {listOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
@@ -238,6 +259,7 @@ export default function TodoDetailsComponent({ todo, onUpdate }) {
                 type="date"
                 value={editedTodo.dueDate}
                 onChange={(e) => setEditedTodo({ ...editedTodo, dueDate: e.target.value })}
+                min={minDate}
                 className="mt-1 px-3 py-2 rounded-lg border dark:text-white border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             ) : (
@@ -250,6 +272,25 @@ export default function TodoDetailsComponent({ todo, onUpdate }) {
                       day: 'numeric'
                     })
                   : <span className="italic text-gray-500">No due date</span>}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <div className="flex-1">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Time</p>
+            {isEditing ? (
+              <input
+                type="time"
+                value={editedTodo.dueTime}
+                onChange={(e) => setEditedTodo({ ...editedTodo, dueTime: e.target.value })}
+                className="mt-1 px-3 py-2 rounded-lg border dark:text-white border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            ) : (
+              <p className="font-medium text-gray-900 dark:text-white">
+                {todo.dueTime || <span className="italic text-gray-500">No time</span>}
               </p>
             )}
           </div>

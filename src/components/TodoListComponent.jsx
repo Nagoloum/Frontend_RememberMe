@@ -1,6 +1,7 @@
 import React from 'react';
-import { Check, Trash2, Calendar, Flag } from 'lucide-react';
+import { Check, Trash2, Calendar, Flag, Clock } from 'lucide-react';
 import { updateTodo, deleteTodo } from '../services/api';
+import NewTaskFloatingComponent from './NewTaskFloatingComponent';
 
 const PRIORITY_COLORS = {
   low: 'text-green-600 bg-green-100 dark:bg-green-900/30',
@@ -19,11 +20,14 @@ const LIST_COLORS = {
 };
 
 export default function TodoListComponent({
+  title = 'Upcoming tasks',
   todos,
   selectedTodoId,
   onSelectTodo,
   onTodoUpdated,
   onTodoDeleted,
+  onError,
+  headerRight,
   loading,
 }) {
   const toggleComplete = async (todo) => {
@@ -32,6 +36,7 @@ export default function TodoListComponent({
       onTodoUpdated(res);
     } catch (err) {
       console.error('Erreur toggle completed:', err);
+      if (onError) onError(err?.response?.data?.message || 'Erreur lors de la mise à jour de la tâche');
     }
   };
 
@@ -41,6 +46,7 @@ export default function TodoListComponent({
       onTodoDeleted(id);
     } catch (err) {
       console.error('Erreur suppression:', err);
+      if (onError) onError(err?.response?.data?.message || 'Erreur lors de la suppression de la tâche');
     }
   };
 
@@ -60,7 +66,10 @@ export default function TodoListComponent({
 
   return (
     <div className="col-span-12 md:col-span-5 bg-gray-50 dark:bg-gray-900 rounded-3xl p-4 overflow-y-auto max-h-[calc(100vh-6rem)]">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 px-2">My Tasks</h2>
+      <div className="flex items-center justify-between gap-3 mb-6 px-2 lg:mt-0 mt-7">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
+        {headerRight}
+      </div>
       <ul className="space-y-3">
         {todos.map((todo) => (
           <li
@@ -99,7 +108,7 @@ export default function TodoListComponent({
                   )}
 
                   <div className="flex flex-wrap items-center gap-2 mt-2 text-xs">
-                    <span className={`px-2.5 py-1 rounded-full font-medium ${LIST_COLORS[todo.list || 'General']}`}>
+                    <span className={`px-2.5 py-1 rounded-full font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300`}>
                       {todo.list || 'General'}
                     </span>
                     <span className={`px-2.5 py-1 rounded-full font-medium flex items-center gap-1 ${PRIORITY_COLORS[todo.priority || 'medium']}`}>
@@ -110,6 +119,12 @@ export default function TodoListComponent({
                       <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
                         <Calendar className="w-4 h-4" />
                         {new Date(todo.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    )}
+                    {todo.dueTime && (
+                      <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                        <Clock className="w-4 h-4" />
+                        {todo.dueTime}
                       </span>
                     )}
                   </div>
