@@ -8,7 +8,12 @@ const PRIORITY_OPTIONS = [
   { value: 'high', label: 'High', emoji: '🔴', color: 'text-red-600' },
 ];
 
-export default function TodoDetailsComponent({ todo, onUpdate, onError }) {
+export default function TodoDetailsComponent({
+  todo,
+  onUpdate,
+  onError,
+  containerClassName = 'col-span-12 md:col-span-5',
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTodo, setEditedTodo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -94,7 +99,7 @@ export default function TodoDetailsComponent({ todo, onUpdate, onError }) {
 
   if (!todo) {
     return (
-      <div className="col-span-12 md:col-span-6 bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center">
+      <div className={`${containerClassName} bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center`}>
         <div className="text-5xl mb-4 opacity-50">👆</div>
         <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
           Select a task
@@ -109,7 +114,7 @@ export default function TodoDetailsComponent({ todo, onUpdate, onError }) {
   const current = isEditing ? editedTodo : todo;
 
   return (
-    <div className="col-span-12 md:col-span-5 bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 overflow-y-auto max-h-[calc(100vh-6rem)]">
+    <div className={`${containerClassName} bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 overflow-y-auto max-h-[calc(100vh-4rem)]`}>
       {/* Header avec bouton Edit/Save */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">

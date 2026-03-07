@@ -88,6 +88,21 @@ export const createList = async (name) => {
   return response.data;
 };
 
+export const getMe = async () => {
+  const response = await api.get('/users/me');
+  return response.data;
+};
+
+export const updateMe = async (updates) => {
+  const response = await api.patch('/users/me', updates);
+  return response.data;
+};
+
+export const getTodayNotifications = async (params) => {
+  const response = await api.get('/notifications/today', params ? { params } : undefined);
+  return response.data;
+};
+
 // Bonus : fonction pour login (si tu en as besoin plus tard)
 export const login = async (credentials) => {
   const response = await api.post('/auth/login', credentials);

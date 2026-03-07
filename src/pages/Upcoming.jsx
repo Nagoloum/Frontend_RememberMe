@@ -3,6 +3,6 @@ import MainPage from './MainPage'
 
 export default function Upcoming() {
   return (
-    <MainPage title="Upcoming tasks" />
+    <MainPage title="Upcoming tasks" compactList />
   )
 }

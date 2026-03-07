@@ -13,11 +13,10 @@ import ErrorPage from './pages/ErrorPage';
 
 // Pages privées
 import UpcomingPage from './pages/Upcoming';
-import TodayPage from './pages/Today';
 import CalendarPage from './pages/Calendar';
-import StickyWallPage from './pages/StickyWall';
 import HomePage from './pages/Home';
 import ListePage from './pages/Liste';
+import SettingsPage from './pages/Settings';
 
 // Layouts
 import RouteLayout from './layouts/RouteLayout';     // Gère loader + auth + transitions
@@ -66,16 +65,6 @@ function App() {
             }
           />
           <Route
-            path="/today"
-            element={
-              <RouteLayout requireAuth={true}>
-                <Layout>
-                  <TodayPage />
-                </Layout>
-              </RouteLayout>
-            }
-          />
-          <Route
             path="/calendar"
             element={
               <RouteLayout requireAuth={true}>
@@ -86,11 +75,22 @@ function App() {
             }
           />
           <Route
-            path="/sticky-wall"
+            path="/calendar/:date"
             element={
               <RouteLayout requireAuth={true}>
                 <Layout>
-                  <StickyWallPage />
+                  <CalendarPage />
+                </Layout>
+              </RouteLayout>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <RouteLayout requireAuth={true}>
+                <Layout>
+                  <SettingsPage />
                 </Layout>
               </RouteLayout>
             }

@@ -16,8 +16,14 @@ export default function GetStartedPage() {
           
           {/* Image à gauche (cachée sur petit écran ou en haut sur mobile) */}
           <div className="order-2 lg:order-1 hidden lg:block justify-center lg:justify-end">
+            {/* image theme clair et image  theme sombre */}
             <img
-              src="images/img1.jpg"
+              src="images/img1.png"
+              alt="Productivité et organisation"
+              className="rounded-3xl shadow-2xl mb-5 max-w-full h-auto object-cover max-h-96 lg:max-h-full"
+            />
+            <img
+              src="images/img3.png"
               alt="Productivité et organisation"
               className="rounded-3xl shadow-2xl max-w-full h-auto object-cover max-h-96 lg:max-h-full"
             />
@@ -30,7 +36,7 @@ export default function GetStartedPage() {
               <img 
                 src="/logo.png" 
                 alt="RememberMe Logo" 
-                className="h-24 w-24 "
+                className="h-24 w-24"
               />
             </div>
 

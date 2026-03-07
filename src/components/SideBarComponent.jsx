@@ -140,9 +140,7 @@ export default function SideBarComponent() {
           <ul className="space-y-1.5">
             {[
               { icon: Home, label: 'Upcoming', href: '/home' },
-              { icon: Clock, label: 'Today', href: '/today' },
               { icon: Calendar, label: 'Calendar', href: '/calendar' },
-              { icon: ListTodo, label: 'Sticky Wall', href: '/sticky-wall' },
             ].map((item) => (
               <li key={item.label}>
                 <NavLink

@@ -8,7 +8,13 @@ const PRIORITY_OPTIONS = [
   { value: 'high', label: 'High', color: 'text-red-600 bg-red-100 dark:bg-red-900/30' },
 ];
 
-export default function NewTaskFloatingComponent({ open, onOpenChange, onSuccess, onError }) {
+export default function NewTaskFloatingComponent({
+  open,
+  onOpenChange,
+  onSuccess,
+  onError,
+  defaultDueDate = '',
+}) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -54,6 +60,14 @@ export default function NewTaskFloatingComponent({ open, onOpenChange, onSuccess
     };
     load();
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (!defaultDueDate) return;
+    if (dueDate) return;
+    const next = defaultDueDate < minDate ? minDate : defaultDueDate;
+    setDueDate(next);
+  }, [defaultDueDate, dueDate, isOpen, minDate]);
 
   const handleAddList = async () => {
     const name = newListName.trim();

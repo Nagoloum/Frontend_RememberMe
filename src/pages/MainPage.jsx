@@ -5,7 +5,7 @@ import NewTaskFloatingComponent from '../components/NewTaskFloatingComponent'; /
 import { getTodos } from '../services/api';
 import { Plus } from 'lucide-react';
 
-export default function MainPage({ listName, title = 'Upcoming tasks' }) {
+export default function MainPage({ listName, title = 'Upcoming tasks', compactList = false }) {
   const [todos, setTodos] = useState([]);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -86,6 +86,7 @@ export default function MainPage({ listName, title = 'Upcoming tasks' }) {
         onTodoUpdated={handleTodoUpdated}
         onTodoDeleted={handleTodoDeleted}
         onError={(message) => setError(message)}
+        compact={compactList}
         headerRight={
           <button
             onClick={() => setCreateOpen(true)}

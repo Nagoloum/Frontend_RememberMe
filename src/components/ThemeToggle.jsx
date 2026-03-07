@@ -35,24 +35,24 @@ export default function ThemeToggle({ floating = true, variant = 'default', clas
   return (
     <button
       onClick={toggleTheme}
-      className={`${floating ? 'fixed bottom-8 right-8 z-50' : ''} ${
+      className={`${floating ? 'fixed bottom-5 right-5 z-50' : ''} ${
         variant === 'sidebar'
           ? 'p-2 bg-transparent dark:bg-transparent border-0 hover:shadow-none'
-          : 'p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-indigo-500/20 dark:hover:shadow-indigo-400/30'
+          : 'p-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-indigo-500/20 dark:hover:shadow-indigo-400/30'
       } rounded-full transition-all duration-500 group ${className}`}
       aria-label="Toggle dark mode"
     >
-      <div className={`relative ${variant === 'sidebar' ? 'w-6 h-6' : 'w-8 h-8'}`}>
+      <div className={`relative ${variant === 'sidebar' ? 'w-6 h-6' : 'w-7 h-7'}`}>
         {/* Soleil (light mode) */}
         <Sun
-          className={`absolute inset-0 ${variant === 'sidebar' ? 'w-6 h-6' : 'w-8 h-8'} text-indigo-500 transition-all duration-700 ${
+          className={`absolute inset-0 ${variant === 'sidebar' ? 'w-6 h-6' : 'w-7 h-7'} text-indigo-500 transition-all duration-700 ${
             isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
           }`}
         />
 
         {/* Lune (dark mode) */}
         <Moon
-          className={`absolute inset-0 ${variant === 'sidebar' ? 'w-6 h-6' : 'w-8 h-8'} text-indigo-400 transition-all duration-700 ${
+          className={`absolute inset-0 ${variant === 'sidebar' ? 'w-6 h-6' : 'w-7 h-7'} text-indigo-400 transition-all duration-700 ${
             isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
           }`}
         />
