@@ -1,7 +1,7 @@
 // services/api.js
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL; // Cela prendra la valeur du .env approprié
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -10,7 +10,6 @@ const api = axios.create({
   },
 });
 
-// Fonction pour définir le token dynamiquement
 export const setAuthToken = (token) => {
   if (token) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -19,7 +18,6 @@ export const setAuthToken = (token) => {
   }
 };
 
-// Charger le token au démarrage (si déjà connecté)
 const storedToken = localStorage.getItem('token');
 if (storedToken) {
   setAuthToken(storedToken);
@@ -36,11 +34,9 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Intercepteur pour gérer les erreurs globalement
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Optionnel : gérer 401 (déconnexion)
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -48,34 +44,31 @@ api.interceptors.response.use(
       if (window.location.pathname !== '/auth') {
         window.location.assign('/auth');
       }
-      // window.location.href = '/login'; // Décommente si tu as une page login
     }
     return Promise.reject(error);
   }
 );
 
-// ========================
-// Fonctions API
-// ========================
+// Fonctions API 
 
 export const getTodos = async (params) => {
   const response = await api.get('/todos', params ? { params } : undefined);
-  return response.data; // ← On retourne directement les données
+  return response.data;
 };
 
 export const createTodo = async (todoData) => {
   const response = await api.post('/todos', todoData);
-  return response.data; // ← Todo créé avec _id, etc.
+  return response.data;
 };
 
 export const updateTodo = async (id, updates) => {
   const response = await api.put(`/todos/${id}`, updates);
-  return response.data; // ← Todo mis à jour
+  return response.data;
 };
 
 export const deleteTodo = async (id) => {
   const response = await api.delete(`/todos/${id}`);
-  return response.data; // ← { message, todos } d'après ton controller
+  return response.data;
 };
 
 export const getLists = async () => {
@@ -103,7 +96,6 @@ export const getTodayNotifications = async (params) => {
   return response.data;
 };
 
-// Bonus : fonction pour login (si tu en as besoin plus tard)
 export const login = async (credentials) => {
   const response = await api.post('/auth/login', credentials);
   const token = response.data.token;

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { setAuthToken } from '../services/api';
-
+import { toast } from 'react-toastify'; // Importez toast ici
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,7 +18,7 @@ export default function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const baseUrl = process.env.REACT_APP_API_URL; // URL dynamique
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
     const endpoint = isLogin ? '/auth/login' : '/auth/register';
     const url = `${baseUrl}${endpoint}`;
 
@@ -39,20 +39,20 @@ export default function AuthPage() {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         setAuthToken(data.token);
+        toast.success('Authentication successful! Redirecting...'); // Feedback positif
         navigate('/home', { replace: true });
       } else {
-        alert(data.message || 'Erreur d’authentification');
+        toast.error(data.message || 'An error occurred during authentication.'); // Erreur élégante
       }
       // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      alert('Erreur de connexion au serveur. Vérifiez que le backend est lancé.');
+      toast.error('An error occurred while connecting to the server. Please ensure the backend is running.'); // Erreur élégante
     }
   };
 
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleVisibility = () => setShowPassword(!showPassword);
-
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 transition-colors duration-700">
@@ -207,7 +207,7 @@ export default function AuthPage() {
 
 
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-4 text-center transition-colors duration-700">
-              En continuant, vous acceptez les <a href='/terms-of-use' className='text-indigo-600 dark:text-indigo-400'>conditions d'utilisation</a> et la <a href='/privacy-policy' className='text-indigo-600 dark:text-indigo-400'>politique de confidentialité</a> de <span className='text-indigo-600 dark:text-indigo-400'>RememberMe</span>.
+              By continuing, you agree to the <a href='/terms-of-use' className='text-indigo-600 dark:text-indigo-400'>terms of use</a> and the <a href='/privacy-policy' className='text-indigo-600 dark:text-indigo-400'>privacy policy</a> of <span className='text-indigo-600 dark:text-indigo-400'>RememberMe</span>.
             </p>
           </form>
         </div>

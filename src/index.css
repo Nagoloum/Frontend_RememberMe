@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Styles personnalisés pour react-toastify */
+.Toastify__toast-theme--colored.Toastify__toast--error {
+  background-color: #ef4444; /* Rouge pour erreurs, ou indigo-600 pour cohérence */
+  color: white;
+}
+
+.dark .Toastify__toast-theme--colored.Toastify__toast--error {
+  background-color: #dc2626; /* Version dark */
+  color: #f3f4f6;
+}
+
+.Toastify__toast-body {
+  font-family: inherit; /* Hérite de votre font */
+  font-size: 0.875rem; /* Taille sm */
+}
+
+
+
+
+
+.Toastify__toast {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  font-family: inherit;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(to right, #ef4444, #dc2626) !important;
+  color: white !important;
+}
+
+.dark .Toastify__toast--error {
+  background: linear-gradient(to right, #b91c1c, #991b1b) !important;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(to right, #10b981, #059669) !important;
+  color: white !important;
+}
+
+.dark .Toastify__toast--success {
+  background: linear-gradient(to right, #047857, #065f46) !important;
+}
+
+.Toastify__close-button {
+  color: white !important;
+  opacity: 0.8 !important;
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.4) !important;
+}
