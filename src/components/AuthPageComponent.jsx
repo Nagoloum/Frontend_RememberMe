@@ -18,9 +18,9 @@ export default function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const url = isLogin
-      ? 'http://localhost:5000/api/auth/login'
-      : 'http://localhost:5000/api/auth/register';
+    const baseUrl = process.env.REACT_APP_API_URL; // URL dynamique
+    const endpoint = isLogin ? '/auth/login' : '/auth/register';
+    const url = `${baseUrl}${endpoint}`;
 
     const body = isLogin
       ? { email: formData.email, password: formData.password }
@@ -204,8 +204,8 @@ export default function AuthPage() {
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
             </p>
-           
-            
+
+
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-4 text-center transition-colors duration-700">
               En continuant, vous acceptez les <a href='/terms-of-use' className='text-indigo-600 dark:text-indigo-400'>conditions d'utilisation</a> et la <a href='/privacy-policy' className='text-indigo-600 dark:text-indigo-400'>politique de confidentialité</a> de <span className='text-indigo-600 dark:text-indigo-400'>RememberMe</span>.
             </p>

@@ -29,7 +29,7 @@ export default function ResetPasswordComponent() {
 
     try {
       // À remplacer par ton vrai appel API
-      // await fetch('http://localhost:5000/api/auth/reset-password', {
+      // await fetch('${process.env.REACT_APP_API_URL}/auth/reset-password', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify({ token: 'from-url-or-state', newPassword })
